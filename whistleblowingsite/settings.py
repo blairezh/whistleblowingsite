@@ -99,10 +99,10 @@ WSGI_APPLICATION = 'whistleblowingsite.wsgi.application'
 DATABASES = {
    'default': {
        'ENGINE': 'django.db.backends.postgresql',
-       'NAME': "d2kip5ta1daa7b",
-       'USER': 'qzjjkbarorajem',
-       'PASSWORD': '083fdfa0178875986a8e055e649531431ee079923c6a92773fb729c19be7980d',
-       'HOST': 'ec2-34-236-199-229.compute-1.amazonaws.com',
+       'NAME': os.environ["DATABASE_NAME"],
+       'USER': os.environ["DATABASE_USER"],
+       'PASSWORD': os.environ["DATABASE_PASSWORD"],
+       'HOST': os.environ["DATABASE_HOST"],
        'PORT': '5432',
    }
 }
