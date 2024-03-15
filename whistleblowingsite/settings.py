@@ -99,10 +99,10 @@ WSGI_APPLICATION = 'whistleblowingsite.wsgi.application'
 DATABASES = {
    'default': {
        'ENGINE': 'django.db.backends.postgresql',
-       'NAME': os.environ["DATABASE_NAME"],
-       'USER': os.environ["DATABASE_USER"],
-       'PASSWORD': os.environ["DATABASE_PASSWORD"],
-       'HOST': os.environ["DATABASE_HOST"],
+       'NAME': "DATABASE_NAME",
+       'USER': "DATABASE_USER",
+       'PASSWORD': "DATABASE_PASSWORD",
+       'HOST': "DATABASE_HOST",
        'PORT': '5432',
    }
 }
