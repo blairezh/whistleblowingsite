@@ -97,14 +97,13 @@ WSGI_APPLICATION = 'whistleblowingsite.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-   'default': {
-       'ENGINE': 'django.db.backends.postgresql',
-       'NAME': "DATABASE_NAME",
-       'USER': "DATABASE_USER",
-       'PASSWORD': "DATABASE_PASSWORD",
-       'HOST': "DATABASE_HOST",
-       'PORT': '5432',
-   }
+    "default": dj_database_url.config(
+        #default='postgres://rgpazisydbriod:754dc0a3685fb9a29c962b376f0576de023ae257f119c2f93453a44a8d3ec7d3@ec2-52-6-117-96.compute-1.amazonaws.com:5432/dao2pqt1ft1n89',
+        default=os.environ.get('DATABASE_URL'),
+        conn_max_age=600,
+        conn_health_checks=True,
+        ssl_require=True,
+    ),
 }
 
 
