@@ -14,6 +14,8 @@ import django_heroku
 import dj_database_url
 
 from pathlib import Path
+import django
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,9 +30,9 @@ SECRET_KEY = 'django-insecure-4&94zqgd0qrf&7xi)e=g@(!gc-a_cmlrk++(q60sp*a7lqzt63
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', 'a-08-3e91aaebfb2c.herokuapp.com']
 
-SITE_ID = 3 #identifies which site we are using for login 
+SITE_ID = 5 #identifies which site we are using for login 
 # Application definition
 
 INSTALLED_APPS = [
@@ -41,12 +43,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'login.apps.LoginConfig', 
+    'storages',
     "django.contrib.sites",
     "allauth", #allows other forms of authentication
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
-    'storages'
+    
 ]
 
 #specify variable for social account provider
@@ -63,9 +66,9 @@ SOCIALACCOUNT_PROVIDERS = {
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "allauth.account.middleware.AccountMiddleware",
@@ -77,7 +80,7 @@ ROOT_URLCONF = 'whistleblowingsite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -96,15 +99,22 @@ WSGI_APPLICATION = 'whistleblowingsite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    "default": dj_database_url.config(
-        #default='postgres://rgpazisydbriod:754dc0a3685fb9a29c962b376f0576de023ae257f119c2f93453a44a8d3ec7d3@ec2-52-6-117-96.compute-1.amazonaws.com:5432/dao2pqt1ft1n89',
-        default=os.environ.get('DATABASE_URL'),
-        conn_max_age=600,
-        conn_health_checks=True,
-        ssl_require=True,
-    ),
-}
+if "DYNO" in os.environ and not "CI" in os.environ:
+    DATABASES = {
+        "default": dj_database_url.config(
+            default=os.environ.get('DATABASE_URL'),
+            conn_max_age=600,
+            conn_health_checks=True,
+            ssl_require=True,
+        ),
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -149,22 +159,22 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #AWS S3 config
-AWS_ACCESS_KEY_ID = 'AKIATCKATD5QB2C3CAHZ ' 
-AWS_SECRET_ACCESS_KEY = '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' 
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID') 
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY') 
 
 AWS_STORAGE_BUCKET_NAME = 'a-08.bucket'
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 AWS_S3_FILE_OVERWRITE = False
+AWS_LOCATION = 'static'
 
-STORAGES = {  
-    "default": { #for media files
-        "BACKEND": "storages.backends.s3boto3.S3StaticStorage",
-    },
+
+# STORAGES = {  
+#     "default": { #for media files
+#         "BACKEND": "storages.backends.s3.S3Storage",
+#     },
     
-    "staticfiles": {
-        "BACKEND": "storages.backends.s3boto3.S3StaticStorage",
-    },
-}
+
+# }
 
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend", #using standard django backend
@@ -178,5 +188,10 @@ LOGOUT_REDIRECT_URL = "/"
 #STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_ROOT = BASE_DIR / "staticfiles"  #collect static files
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'), )
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-django_heroku.settings(locals(), staticfiles=False)
+# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+django_heroku.settings(locals(), staticfiles=False, test_runner=False)
