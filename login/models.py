@@ -21,3 +21,4 @@ class Report(models.Model):
     rating = models.CharField(max_length = 200)
     workType = models.CharField(max_length = 200)
     fileLink = models.CharField(max_length = 500)
+    state = models.CharField(max_length=20, choices=[('new', 'New'), ('seen', 'Seen'), ('approved', 'Approved')], default='new')

@@ -3,13 +3,11 @@ from django.contrib.auth import logout
 from django.contrib.auth.signals import user_logged_in
 from django.dispatch import receiver
 from login.models import Report
-#from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
-
 from .models import Evidence
-
+from django.http import JsonResponse
 
 # Create your views here.
 class DocumentCreateView(CreateView):
@@ -91,11 +89,34 @@ def report(request):
         request,
         "report_page.html"
         )
+
+def update_report_state(request, report_id, state):
+    try:
+        report = Report.objects.get(id=report_id)
+        report.state = state
+        report.save()
+        return JsonResponse({'success': True})
+    except Report.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Report not found'})
     
 def admin_report_view(request):
-    reports = Report.objects.all()
+    new_reports = Report.objects.filter(state='new')
     return render(
         request,
         "admin_report_view.html",
-        {'reports' : reports},
+        {'reports' : new_reports},
         )
+
+def admin_seen_reports(request):
+    seen_reports = Report.objects.filter(state='seen')
+    return render(
+        request, 
+        "seen_reports.html", 
+        {'reports': seen_reports})
+
+def admin_approved_reports(request):
+    approved_reports = Report.objects.filter(state='approved')
+    return render(
+        request, 
+        "approved_reports.html", 
+        {'reports': approved_reports})

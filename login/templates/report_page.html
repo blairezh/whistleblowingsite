@@ -1,74 +1,59 @@
 <!DOCTYPE html>
 {% load socialaccount %}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+  integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 <html lang="en">
-    <!--navbar from bootstrap-->
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <a class="navbar-brand" href="#">Navbar</a>
-          <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <!--add link in href-->
-                <a class="nav-link active" aria-current="page" href="/userlanding">Home</a>
-              </li>
-              <li class="nav-item">
-                <!--add link in href-->
-                <a class="nav-link" href="#">Report</a>
-              </li>
-              <li class="nav-item">
-              </li>
-            </ul> <!-- to change based on login status -->
-            {% if user.is_authenticated %}
-              <a class="nav-link" href="/logout">Logout</a>
-            {% else %}
-              <a class="nav-link" href="{% provider_login_url 'google' %}" method="oauth2">Login</a>
-            {% endif %}
+{% include 'login/user_navbar.html' %}
+
+<body>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+      <div class="container"
+        style="display: flex; justify-content: space-between; width: 710px; height: 480px; background-color: #f0f0f0; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+        <div class="inner-square"
+          style="width: 500px; height: 360px; background-color: #ccc; border-radius: 10px; padding: 20px;">
+          <div name="textInputs" style="display: flex; flex-direction: column; align-items: center;">
+            <label for="className"
+              style="font-size: 30px; font-weight: 100; color:rgb(45, 45, 45); margin-bottom: -25px;">Class:</label><br>
+            <input type="text" id="class" name="className"
+              style="height: 40px; width: 70%; border: 0px; border-radius: 10px; margin-bottom: 5px;"><br>
+            <label for="professorName"
+              style="font-size: 30px; font-weight: 100; color:rgb(45, 45, 45); margin-bottom: -25px;">Professor:</label><br>
+            <input type="text" id="professor" name="professorName"
+              style="height: 40px; width: 70%; border: 0px; border-radius: 10px; margin-bottom: 5px;"><br>
+            <label for="studetnName"
+              style="font-size: 30px; font-weight: 100; color:rgb(45, 45, 45); margin-bottom: -25px;"> Student Name:</label><br>
+            <input type="text" id="student" name="studentName"
+              style="height: 40px; width: 70%; border: 0px; border-radius: 10px; margin-bottom: 5px;"><br>
           </div>
         </div>
-    </nav>
-
-    <body>
-      
-        <div class="position-absolute top-50 start-50 translate-middle">
-
-            <form method="post" enctype="multipart/form-data">
-              {% csrf_token %}
-                <div name="textInputs">
-                    <label for="className">Class:</label><br>
-                    <input type="text" id="class" name="className"><br>
-                    <label for="professorName">Professor:</label><br>
-                    <input type="text" id="professor" name="professorName"><br>
-                    <label for="studetnName"> Student Name:</label><br>
-                    <input type="text" id="student" name="studentName"><br>
-                </div>
-                <div name="selectRating">
-                    <input type="radio" id="positive" name="rating" value="positive">
-                    <label for="positive">Positive</label><br>
-                    <input type="radio" id="neutral" name="rating" value="neutral">
-                    <label for="neutral">Neutral</label><br>
-                    <input type="radio" id="negative" name="rating" value="negative">
-                    <label for="negative">Negative</label>
-                </div>
-                <div name="selectWorkType">
-                    <input type="checkbox" id="inClass" name="workType" value="inClass">
-                    <label for="inClass"> In Class Assignment</label><br>
-                    <input type="checkbox" id="project" name="workType" value="project">
-                    <label for="project"> Project</label><br>
-                    <input type="checkbox" id="groupAssignment" name="workType" value="groupAssignment">
-                    <label for="vehicle3"> Group Assignment</label><br>
-                </div>
-                <div name="fileSubmit">
-                    <input type="file" id="fileUpload" name="filename">
-                </div>
-                <input type="hidden" name="userID" value="{{ user.email }}">
-                <input type="submit">
-
-            </form>
-            
+        <div>
+          <div style="display: flex; align-items: center; flex-direction: column;">
+            <div name="selectRating" style="margin-bottom: 20px;">
+              <input type="radio" id="positive" name="rating" value="positive" style="width: 18px; height: 18px;">
+              <label for="positive" style="font-size: 30px; font-weight: 100; color:rgb(45, 45, 45); padding-bottom: 30px;">Positive</label><br>
+              <input type="radio" id="neutral" name="rating" value="neutral" style="width: 18px; height: 18px;">
+              <label for="neutral" style="font-size: 30px; font-weight: 100; color:rgb(45, 45, 45); padding-bottom: 30px;">Neutral</label><br>
+              <input type="radio" id="negative" name="rating" value="negative" style="width: 18px; height: 18px;">
+              <label for="negative" style="font-size: 30px; font-weight: 100; color:rgb(45, 45, 45);">Negative</label>
+            </div>
+          </div>
         </div>
-    </body>
+      </div>
+      <div name="selectWorkType" style="display: fixed; bottom: 100%; transform: translate3d(calc(50vw - 335px), -100px, 0px); width: 670px; height: 50px;">
+        <input type="radio" id="inClass" name="workType" value="inClass"
+          style="width: 30px; height: 30px; transform: translateY(5px);">
+        <label for="inClass" style="font-size: 30px; font-weight: 100; color:rgb(45, 45, 45); display: inline-block; margin-right: 10px; padding-right: 60px; transform: translateX(-10px);"> Assignment</label>
+        <input type="radio" id="project" name="workType" value="project"
+          style="width: 30px; height: 30px; transform: translateY(5px);">
+        <label for="project" style="font-size: 30px; font-weight: 100; color:rgb(45, 45, 45); display: inline-block; margin-right: 10px; transform: translateX(-10px);"> Project</label>
+      </div>
+      <div style="display: fixed; bottom: 100%; transform: translate3d(calc(50vw - 355px), -40px, 0px); width: 710px; height: 50px;">
+        <input type="file" id="fileUpload" name="filename" style="font-size: 24px; font-weight: 100; color:rgb(45, 45, 45); border-radius: 5px; width: 350px; height: 50px; margin-right: 2px;">
+        <input type="hidden" name="userID" value="{{ user.email }}">
+        <input type="submit" style="font-size: 24px; font-weight: 100; color:rgb(45, 45, 45); border-radius: 5px; border: 0px; background-color: rgb(150, 150, 255); width: 350px; height: 50px; margin-left: 3px;">
+      </div>
+    </div>
+  </form>
+</body>
 </html>
