@@ -9,7 +9,7 @@ from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 
 from .models import Evidence
-from .forms import ReportForm
+from .forms import FeedbackForm
 
 # Create your views here.
 class DocumentCreateView(CreateView):
@@ -43,8 +43,6 @@ def logout_view(request):
     logout(request)
     return redirect("/")
 
-def admin_view_reports(request):
-    return render(request, "admin_view_reports.html")
 
 def user_reports(request):
     return render(request, "user_reports.html")
@@ -100,8 +98,22 @@ def user_view_reports(request):
     
 def admin_report_view(request):
     reports = Report.objects.all()
-    return render(
-        request,
-        "admin_report_view.html",
-        {'reports' : reports},
-        )
+    for report in reports:
+        if report.status == 'NEW':  
+            report.status = 'INP' 
+            report.save()
+    return render(request, "admin_report_view.html", {"report": report})
+
+def admin_feedback(request):
+    if request.method == "POST":
+        report_id = request.POST.get('report_id')
+        report = get_object_or_404(Report, pk=report_id)
+        form = FeedbackForm(request.POST, instance=report)
+        if form.is_valid():
+            report = form.save(commit=False)
+            report.status = 'RESOLVED'
+            report.save()
+            return render(request, "admin_report_view.html", {"form": form, "report": report})
+    else:
+            return redirect('admin_report_view')
+
