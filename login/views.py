@@ -111,7 +111,7 @@ def admin_feedback(request):
         form = FeedbackForm(request.POST, instance=report)
         if form.is_valid():
             report = form.save(commit=False)
-            report.status = 'RESOLVED'
+            report.status = 'RES'
             report.save()
             return render(request, "admin_report_view.html", {"form": form, "report": report})
     else:
