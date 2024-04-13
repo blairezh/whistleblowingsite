@@ -16,6 +16,14 @@
     </label>
   </div>
   {% endif %}
+  {% if success_message %}
+  <div id="errorDiv"
+    style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 852px; height: 120px; background-color: #4bf253; padding: 20px; border-radius: 15px; margin-bottom: 20px; z-index: 9999; text-align: center; opacity: 1; transition: opacity 1s;">
+    <label for="className" style="font-size: 45px; font-weight: 100; color:rgb(45, 45, 45);">
+      Success: {{ success_message }}
+    </label>
+  </div>
+  {% endif %}
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="container"

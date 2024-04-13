@@ -68,18 +68,8 @@ def admin_landing_view(request):
 
 def report(request):
     if request.method == 'POST':
-        try:
-            evidence = Evidence(upload=request.FILES['filename'])
-            fileLink = evidence.upload.url
-            evidence.save()
-        except Exception as e:
-            return render(
-                request,
-                "report_page.html",
-                {
-                    "error_message": "You are missing one or more fields",
-                },
-                )
+        
+        # get all data fields
         userID = request.POST['userID']
         className = request.POST['className']
         professorName = request.POST['professorName']
@@ -90,9 +80,6 @@ def report(request):
         email_prof = request.POST.get('email_prof')
         report = request.POST['report']
         privacy = request.POST.get('privacy')
-        
-        print(privacy)
-        
         if privacy == "public":
             privacy_boolean = False
         else:
@@ -102,15 +89,15 @@ def report(request):
             email_prof_boolean = True
         else:
             email_prof_boolean = False
-        
         status = "New"
         feedback = ""
         report=request.POST['report']
         professor_email=request.POST['professor_email']
         if userID == "":
             userID = "Anonymous"
-        
-        if professor_email == "" or email_prof == None or report == "" or fileLink == "" or className == "" or professorName == "" or studentName == "" or rating == None or workType == None or status == "":
+            
+        # check if any data fields are missing
+        if email_prof == None or (professor_email == "" and email_prof_boolean == True) or report == "" or className == "" or professorName == "" or studentName == "" or rating == None or workType == None or status == "":
             return render(
                 request,
                 "report_page.html",
@@ -119,10 +106,25 @@ def report(request):
                 },
                 )
             
+        # check if file is uploaded
+        try:
+            evidence = Evidence(upload=request.FILES['filename'])
+            fileLink = evidence.upload.url
+            evidence.save()
+        except Exception as e:
+            fileLink = ""
+    
         Report.objects.create(userID = userID, report = report, className = className, professorName = professorName, studentName = studentName, rating = rating, workType = workType, fileLink = fileLink, status=status, feedback=feedback, email_prof = email_prof_boolean, professor_email = professor_email, private = privacy_boolean)
+        return render(
+            request,
+            "report_page.html", 
+            {
+                "success_message": "Report submitted.",
+            },
+            )
     return render(
         request,
-        "report_page.html"
+        "report_page.html", 
         )
 
 @login_required
