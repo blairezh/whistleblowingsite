@@ -5,7 +5,7 @@
 <html lang="en">
 {% include 'login/user_navbar.html' %}
 
-<body style="margin-top: 120px; background-color: rgb(224, 122, 95)">
+<body style="margin-top: 120px; background-color: #3D405B">
   {% if error_message %}
   <div class="container"
     style="display: flex; justify-content: center; width: 710px; height: 100px0px; background-color: #ED4337; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
@@ -22,13 +22,13 @@
       </div>
 
       <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
-        <div class="iframe-wrapper" style="width: 50%; padding: 5px;">
+        <div class="iframe-wrapper" style="height:30%; width: 50%; padding: 5px;">
           <p style="font-size: 30px; text-align: center; align-items: center; margin-bottom: 1vh;">Report:
           </p>
           <div style="width: 100%;height: 290px; border: 0px; border-radius: 5px; background-color: #f0f0f0;">
             <p style="padding-left: 5px;">{{ report.report.capitalize }}</p>
             <iframe id="display" src="{{ report.fileLink }}"
-              style="width: 100%; height: 300px; overflow: hidden; border: 0;" scrolling="yes"></iframe>
+              style="width: 100%; height: 75%; overflow: hidden; border: 0;" scrolling="yes"></iframe>
             </div>
         </div>
 
