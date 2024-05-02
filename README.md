@@ -1,14 +1,9 @@
 # CollabCritique
 
-__Name: Alisha Qian, Jazhua Cheng, Blair Zhao, Jacob Hyunh, Colin Bitz__
-
-__Computing ID: Sta2fu, ajd8xe, zfj4ee, sff8qc, wuh4xg__
-
-Made for CS 3240
+__Name: Alisha Qian, Jazhua Cheng, Blaire Zhao, Jacob Hyunh, Colin Bitz__
+Made for UVA CS 3240
 
 Welcome to CollabCritique, your one stop shop for submitting and viewing reviews/reports for other students you have worked with in group settings!
-
-Check it out: https://a-08-3e91aaebfb2c.herokuapp.com/
 
 Key features:
 - optional anonymous reports
